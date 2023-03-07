@@ -1,8 +1,12 @@
 {% extends 'base/main.html' %}
 {% block content %}
+<div class="header-bar">
 <a href="{% url 'tasks' %}">Go back</a>
-<h1>Current task: {{ task.title }}</h1>
+</div>
+
+<div class="card-body"><h1>Current task: {{ task.title }}</h1>
 <p>detailed: {{ task.description }}</p>
 <p>created at: {{ task.created }}</p>
-<p>is complete: {{ task.is_complete }}</p>
+<p>is complete: {{ task.is_complete }}</p></div>
+
 {% endblock %}

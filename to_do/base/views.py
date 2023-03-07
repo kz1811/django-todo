@@ -1,9 +1,10 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView, FormView
 from django.contrib.auth.views import LoginView, LogoutView
+
+from .mixins import UserShouldBeOwnerMixin
 from .models import Task
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -65,7 +66,7 @@ class TaskList(LoginRequiredMixin, ListView):
         return context
 
 
-class TaskDetail(LoginRequiredMixin, DetailView):
+class TaskDetail(UserShouldBeOwnerMixin, DetailView):
     model = Task
     context_object_name = 'task'
     template_name = 'base/detailed_view_task.html'
@@ -81,14 +82,13 @@ class TaskCreate(LoginRequiredMixin, CreateView):
         return super(TaskCreate, self).form_valid(form)
 
 
-class TaskUpdate(LoginRequiredMixin, UpdateView):
+class TaskUpdate(UserShouldBeOwnerMixin, UpdateView):
     model = Task
     fields = ["title", "description", "is_complete"]
     success_url = reverse_lazy('tasks')
 
 
-class TaskDelete(LoginRequiredMixin, DeleteView):
+class TaskDelete(UserShouldBeOwnerMixin, DeleteView):
     model = Task
     fields = '__all__'
     success_url = reverse_lazy('tasks')
-
